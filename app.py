@@ -38,6 +38,21 @@ def login():
 def logout():
     session.pop('user',None)
     return redirect("/");
+
+@app.route("/track")
+def track():
+    if 'user' not in session:
+        session['nextpage']=request.path
+        return redirect(url_for('login',nextpage=request.path))
+    return render_template("placeholder.html",PAGENAME=request.path)
+
+@app.route("/stalk")
+def stalk():
+    if 'user' not in session:
+        session['nextpage']=request.path
+        return redirect(url_for('login',nextpage=request.path))
+    return render_template("placeholder.html",PAGENAME=request.path)
+
 @app.route("/")
 def index():
     if 'user' not in session:

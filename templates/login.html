@@ -5,8 +5,9 @@
 <form method="POST">
 <div class="row">
   <div class="small-4 columns">
-    <label>Username:</label><input type="text" id="username" placeholder="Name"/>
-    <label>Password:</label><input type="text" id="password" placeholder="Password"/>
+    <input type="hidden" name="nextpage" value="{{next}}"/>
+    <label>Username:</label><input type="text" name="username" id="username" placeholder="Name"/>
+    <label>Password:</label><input type="text" name="password" id="password" placeholder="Password"/>
   </div>
   <div class="small-3 columns">
     <input type="submit" value="login" class="button"></input>

@@ -5,35 +5,36 @@ app=Flask(__name__)
 
 
 
-@app.route("/loginform",methods=['GET','POST'])
-def loginform():
-    if request.method=='GET':
-        print request.args.get('nextpage')
-        return render_template("login.html")
-    else:
-        return "DOING THE LOGIN"
-
-@app.route("/login")
+@app.route("/login",methods=['GET','POST'])
 def login():
-    user = request.args.get('username',"")
-    pw = request.args.get("password","")
+    if request.method=='GET':
+        #print request.args.get('nextpage')
+        return render_template("login.html",next=request.args.get('nextpage',"/login"))
+    else:
+        print request.form.keys()
+        user = request.form['username']
+        pw = request.form['password']
+        next = request.form['nextpage']
+        print next
+        session['user']=user
+        return redirect(next)
 
-    if user=="z" and pw=="z":
-        session['user']='z'
-        return json.dumps({'user':"z"})
-    return json.dumps({'user':""})
 
 @app.route("/register")
 def register():
     return "REGISTER PAGE"
 
 
+@app.route("/logout")
+def logout():
+    session.pop('user',None)
+    return redirect("/");
 @app.route("/")
 def index():
-    session['nextpage']=request.path
-    print request.path
-    return redirect(url_for('loginform',nextpage=request.path))
-
+    if 'user' not in session:
+        session['nextpage']=request.path
+        return redirect(url_for('login',nextpage=request.path))
+    return render_template("index.html")
 
 
 @app.route("/f")

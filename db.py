@@ -16,14 +16,10 @@ def checkCredentials(username,password):
     res=users.find({"user":username,"pass":password})
     return len([x for x in res])==1
 
-def addUser(username,passw0rd):
+def addUser(username,password):
     res = users.find({'usr':username})
     if len([x for x in res])>0:
         return None
-    
     users.insert({'user':username,'pass':password})
     return (username,password)
 
-print checkCredentials('z','fffff')
-print checkCredentials('z','z')
-print checkCredentials('a','fffff')

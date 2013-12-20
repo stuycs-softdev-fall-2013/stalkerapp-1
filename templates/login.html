@@ -3,6 +3,19 @@
 {% block content %}
 
 <form method="POST">
+  <div class="row">
+    <div class="large=12 columns">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul class=flashes>
+	{% for message in messages %}
+	<li>{{ message }}</li>
+	{% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+    </div>
+  </div>
 <div class="row">
   <div class="small-4 columns">
     <input type="hidden" name="nextpage" value="{{next}}"/>
@@ -10,8 +23,8 @@
     <label>Password:</label><input type="text" name="password" id="password" placeholder="Password"/>
   </div>
   <div class="small-3 columns">
-    <input type="submit" value="login" class="button"></input>
-    <input type="submit" value="register" class="button"></input>
+    <input type="submit" name="button" value="login" class="button"></input>
+    <input type="submit" name="button" value="register" class="button"></input>
   </div>
 </div>
 </form>

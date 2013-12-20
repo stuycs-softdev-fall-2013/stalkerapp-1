@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template, session, redirect, url_for
+from flask import Flask, request, render_template, session, redirect, url_for, flash
 import json
+import db
 
 app=Flask(__name__)
 
@@ -10,19 +11,27 @@ def login():
     if request.method=='GET':
         #print request.args.get('nextpage')
         return render_template("login.html",next=request.args.get('nextpage',"/login"))
-    else:
-        print request.form.keys()
+    elif request.form['button']=='login':
         user = request.form['username']
         pw = request.form['password']
         next = request.form['nextpage']
-        print next
+        result = db.checkCredentials(user,pw)
+        if result==False:
+            flash("Invalid username or password")
+            return render_template("login.html",next=request.args.get('nextpage',"/login"))
         session['user']=user
         return redirect(next)
-
-
-@app.route("/register")
-def register():
-    return "REGISTER PAGE"
+    else:
+        user = request.form['username']
+        pw = request.form['password']
+        next = request.form['nextpage']
+        result = db.addUser(user,pw)
+        if result==None:
+            flash("Couldn't add user");
+            return render_template("login.html",next=request.args.get('nextpage',"/login"))
+        else:
+            flash("Log in using new username and password")
+            return render_template("login.html",next=request.args.get('nextpage',"/login"))
 
 
 @app.route("/logout")

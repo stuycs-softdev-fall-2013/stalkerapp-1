@@ -8,10 +8,22 @@ users = db.users
 #users.insert({'user':'z','pass':'z'})
 #users.drop()
 
+# geo routines
 
-# lookup
-# add
-# drpop
+# tracking page
+# add active - add a new location to active
+# drop inactive for 5 minutes
+# get all current
+
+# stalking page
+# fields have: name location count
+
+# merge like locations that are within a certain rage
+# 
+# add a location (merge in to closest or add new)
+
+#needs
+# drop
 def checkCredentials(username,password):
     res=users.find({"user":username,"pass":password})
     return len([x for x in res])==1

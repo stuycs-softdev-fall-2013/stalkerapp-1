@@ -24,7 +24,9 @@ def updateCurrent(name,loc):
    remove the old current for this user
    and add in a new location
    """
+   print "HELLO"
    db.current.remove({'name':name})
+   print "World"
    newitem = {'name':name,'timestamp':time.time(),
               'geo':{'type':'Point',
                      'coordinates':loc}}

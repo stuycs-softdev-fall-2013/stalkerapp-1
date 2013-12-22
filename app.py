@@ -61,10 +61,36 @@ def index():
     return render_template("index.html")
 
 
+# AJAX ROUTINES
+@app.route("/getCurrents")
+def getCurrents():
+    return db.getCurrents()
+
+
+@app.route("/updateCurrent")
+def updateCurrent():
+    if 'user' not in session:
+        session['nextpage']=request.path
+        return redirect(url_for('login',nextpage=request.path))
+    name=session['user']
+    lat = request.args.get('lat')
+    lng = request.args.get('long')
+    print lat,lng
+    loc=[lat,lng]
+    db.updateCurrent(name,loc)
+    return json.dumps(True)
+
+
 @app.route("/f")
 def f():
     return render_template("base.html")
+
+
+
+
 if __name__=="__main__":
     app.secret_key = "the secret key"
     app.debug=True
     app.run(host="0.0.0.0",port=5000)
+
+

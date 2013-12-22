@@ -7,7 +7,10 @@ import json
 # local packages
 import db
 
+
 app=Flask(__name__)
+# The secret key MUST be set out side of the main if at the bottom
+app.secret_key = "the secret key"
  
 ################################################################################
 #
@@ -130,7 +133,6 @@ def updateCurrent():
 ################################################################################
 
 if __name__=="__main__":
-    app.secret_key = "the secret key"
     app.debug=True
     app.run(host="0.0.0.0",port=5000)
 

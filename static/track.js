@@ -8,12 +8,14 @@ function initialize(p) {
 
   map = new google.maps.Map(document.getElementById('trackmap'),
       mapOptions);
-
+/*
     var marker = new google.maps.Marker({
 	position:ll,
-	map:map 
+	map:map
+	//icon:"/static/markers/green_MarkerA.png"
 	});
     
+*/
 }
 
 
@@ -33,11 +35,30 @@ var updateCurrent = function() {
 	});
 }
 
-
+var markers,marker;
 var getCurrents = function() {
     $.getJSON("/getCurrents",function(d) {
-	console.log(d);
-    });
+	markers=[];
+	for (var i = 0 ; i < d.length;i++) {
+	    var ll = new google.maps.LatLng(d[i].geo.coordinates[0],
+					    d[i].geo.coordinates[1])
+	    console.log(ll);
+	    var moptions={
+		position:ll,
+		map:map,
+		title:d[i].name};
+	    var icon;
+	    if (d[i].name==$("#user").val()) 
+		icon="/static/markers/green_MarkerA.png";
+	    else
+		icon="/static/markers/red_MarkerA.png";
+	    moptions['icon'] = icon;
+	    console.log(moptions);
+	    marker = new google.maps.Marker(moptions);
+	    markers.push(marker);
+	 
+	}
+	});
 }
 
 

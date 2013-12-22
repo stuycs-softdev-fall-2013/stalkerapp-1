@@ -44,7 +44,7 @@ def track():
     if 'user' not in session:
         session['nextpage']=request.path
         return redirect(url_for('login',nextpage=request.path))
-    return render_template("track.html",PAGENAME=request.path)
+    return render_template("track.html",PAGENAME=request.path,user=session['user'])
 
 @app.route("/stalk")
 def stalk():

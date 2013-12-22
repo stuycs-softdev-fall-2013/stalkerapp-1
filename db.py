@@ -1,23 +1,29 @@
-
 from pymongo import Connection
 import json,time
+
+
+################################################################################
+#
+#        setting up the database
+#
+################################################################################
 
 c = Connection()
 db = c.stalkerapp
 users = db.users
-#u=users.find({'user':'z'})
-#users.insert({'user':'z','pass':'z'})
-#users.drop()
 
-# geo routines
+################################################################################
+#
+#        tracking routines
+#
+################################################################################
 
-# tracking page
-# drop inactive for 5 minutes
-# get all current
 
 def updateCurrent(name,loc):
-    # remove old current
-    # add new current
+   """
+   remove the old current for this user
+   and add in a new location
+   """
    db.current.remove({'name':name})
    newitem = {'name':name,'timestamp':time.time(),
               'geo':{'type':'Point',
@@ -25,7 +31,10 @@ def updateCurrent(name,loc):
    db.current.insert(newitem)
 
 def getCurrents():
-    return json.dumps([x for x in db.current.find({},{'_id':False})])
+   """
+   return everyone logged in right now
+   """
+   return json.dumps([x for x in db.current.find({},{'_id':False})])
 
 
 def removeOld():
@@ -35,17 +44,17 @@ def removeOld():
     now=time.time()
     toremove = [x for x in db.current.find() if now-x['timestamp']>60*5]  # remove 5 minutes old
     for r in toremove:
-        print r
+        db.current.remove(r)
 
 
     
 
 
-# merge like locations that are within a certain rage
-# 
-# add a location (merge in to closest or add new)
-
-
+################################################################################
+#
+#        User routines
+#
+################################################################################
 
 
 def checkCredentials(username,password):
@@ -58,6 +67,13 @@ def addUser(username,password):
         return None
     users.insert({'user':username,'pass':password})
     return (username,password)
+
+
+################################################################################
+#
+#        main (for testing)
+#
+################################################################################
 
 if __name__=='__main__':
     removeOld()

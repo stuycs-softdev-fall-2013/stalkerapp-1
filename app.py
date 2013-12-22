@@ -1,15 +1,30 @@
+# flask imports
 from flask import Flask, request, render_template, session, redirect, url_for, flash
+
+# python builtin imports
 import json
+
+# local packages
 import db
 
 app=Flask(__name__)
-
+ 
+################################################################################
+#
+#        Web page routes
+#
+################################################################################
 
 
 @app.route("/login",methods=['GET','POST'])
 def login():
+    """
+    print a login page and either handle a login or register from the page.
+    
+    use the nextpage argument in the request to forward to another page once
+    login is succesful (and store 'user' in the session)
+    """
     if request.method=='GET':
-        #print request.args.get('nextpage')
         return render_template("login.html",next=request.args.get('nextpage',"/login"))
     elif request.form['button']=='login':
         user = request.form['username']
@@ -22,6 +37,7 @@ def login():
         session['user']=user
         return redirect(next)
     else:
+        # register
         user = request.form['username']
         pw = request.form['password']
         next = request.form['nextpage']
@@ -36,11 +52,16 @@ def login():
 
 @app.route("/logout")
 def logout():
+    """
+    """
     session.pop('user',None)
     return redirect("/");
 
 @app.route("/track")
 def track():
+    """
+    go to the map page showing users currently logged in - mostly javascript in track.js
+    """
     if 'user' not in session:
         session['nextpage']=request.path
         return redirect(url_for('login',nextpage=request.path))
@@ -48,6 +69,9 @@ def track():
 
 @app.route("/stalk")
 def stalk():
+    """
+    does nothing right now
+    """
     if 'user' not in session:
         session['nextpage']=request.path
         return redirect(url_for('login',nextpage=request.path))
@@ -55,20 +79,37 @@ def stalk():
 
 @app.route("/")
 def index():
+    """
+    Home page - doesn't do anything right now
+    """
     if 'user' not in session:
         session['nextpage']=request.path
         return redirect(url_for('login',nextpage=request.path))
     return render_template("index.html")
 
 
-# AJAX ROUTINES
+################################################################################
+#
+#        AJAX page routes
+#
+################################################################################
+
 @app.route("/getCurrents")
 def getCurrents():
+    """
+    return a list of the current people on the system
+    fields include: name, timestamp, geo
+    geo includes: type (point), coordinates (lat,lng)
+    """
     return db.getCurrents()
 
 
 @app.route("/updateCurrent")
 def updateCurrent():
+    """
+    modify database so it stores the current users current location
+    Must be logged in (hence the 'user' if up top
+    """
     if 'user' not in session:
         session['nextpage']=request.path
         return redirect(url_for('login',nextpage=request.path))
@@ -81,12 +122,12 @@ def updateCurrent():
     return json.dumps(True)
 
 
-@app.route("/f")
-def f():
-    return render_template("base.html")
 
-
-
+################################################################################
+#
+#        main
+#
+################################################################################
 
 if __name__=="__main__":
     app.secret_key = "the secret key"

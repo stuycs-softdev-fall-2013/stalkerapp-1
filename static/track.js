@@ -12,9 +12,14 @@ var track = function() {
 	
 	map = new google.maps.Map(document.getElementById('trackmap'),
 				  mapOptions);
-
+	
+	$.ajax({
+	    dataType: 'json',
+	    url:'/updateCurrent',
+	    data: {'lat':p.coords.latitude,'long':p.coords.longitude},
+	    success : function(d) {console.log(d);}
+	})
 	getCurrents();
-	updateCurrent();
 
     }
 
@@ -73,12 +78,12 @@ var track = function() {
     var timer;
 
     var updateAll = function() {
-	getCurrents();
 	updateCurrent();
+	getCurrents();
     }
 
     var setupTimers = function() {
-	timer = setInterval(updateAll,1000*60);
+	timer = setInterval(updateAll,1000*10);
     }
 	
     return {

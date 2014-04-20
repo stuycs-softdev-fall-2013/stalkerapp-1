@@ -9,6 +9,10 @@ import json,time
 ################################################################################
 import os
 c = Connection(port=os.getenv("MONGO_PORT"))
+uname = os.getenv("MONGODB_USERNAME")
+pword = os.getenv("MONGODB_PASSWORD")
+db=c.admin
+db.auth(uname,pword)
 db = c[os.getenv("MONGODB_DATABASE")]
 users = db.users
 

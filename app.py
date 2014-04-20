@@ -1,7 +1,7 @@
 ##flask imports cc
 from flask import Flask, request, render_template, session, redirect, url_for, flash
 
-# uiltin imports
+# iltin imports
 import json
 
 # local packages

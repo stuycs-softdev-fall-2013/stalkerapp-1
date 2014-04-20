@@ -7,9 +7,9 @@ import json,time
 #        setting up the database
 #
 ################################################################################
-
-c = Connection()
-db = c.stalkerapp
+import os
+c = Connection(port=os.getenv("MONGO_PORT"))
+db = c[os.getenv("MONGODB_DATABASE")]
 users = db.users
 
 ################################################################################

@@ -8,8 +8,8 @@ import json,time
 #
 ################################################################################
 import os
-#c = Connection(port=os.getenv("MONGO_PORT"))
-c =  Connection(port=49157)
+c = Connection(host=os.getenv("MONGO_URL"),port=os.getenv("MONGO_PORT"))
+#c =  Connection(port=49157)
 uname = os.getenv("MONGODB_USERNAME")
 pword = os.getenv("MONGODB_PASSWORD")
 db=c.['test-production']
